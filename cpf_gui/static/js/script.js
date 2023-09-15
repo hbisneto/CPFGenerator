@@ -1,10 +1,48 @@
 var cpfData = ["00000000000","000.000.000-00"]
 document.getElementById("cpf-box").value = cpfData[0]
 var estado;
+let counter = 0;
+
+function createTable() {
+    console.log("Userinput: " + cpfData[0]);
+    console.log("Estado: " + estado);
+    console.log("CPF DATA: " + cpfData[1])
+
+    var table = document.getElementById('table_log');
+    table.className='table'
+    counter+= 1;
+    for (var i = 0; i < 1; i++) {
+        var tbody = document.getElementById('table_body')
+        var tr = document.createElement('tr');
+        var th = document.createElement('th');
+        th.scope = 'row'
+
+        var cell1 = document.createElement('td');
+        cell1.style.fontWeight = "bold"
+        cell1.textContent = counter;
+        tr.appendChild(cell1);
+
+        var cell2 = document.createElement('td');
+        cell2.textContent = cpfData[1];
+        tr.appendChild(cell2);
+
+        var cell3 = document.createElement('td');
+        cell3.textContent = cpfData[0];
+        tr.appendChild(cell3);
+
+        var cell4 = document.createElement('td');
+        cell4.textContent = estado;
+        tr.appendChild(cell4);
+
+        tbody.appendChild(tr);
+        row.appendChild(th);
+        table.appendChild(tbody);
+    }
+}
 
 const gerarCpf = () => {
-    var select = document.getElementById("estados");
-    estado = select.options[select.selectedIndex].value;
+    var ufInput = document.getElementById("estados");
+    estado = ufInput.options[ufInput.selectedIndex].value;
     fetch(`http://127.0.0.1:8000/api/cpf/gerar/?estado=${estado}`)
     .then(response => {
         if(!response.ok) {
@@ -16,6 +54,7 @@ const gerarCpf = () => {
         document.getElementById("cpf-box").style.borderColor = "white"
         mostrarCpf(coletarCpf() === cpfData[0] ? data[0]: data[1])
         cpfData = Object.values(data)
+        createTable();
     })
     .catch(error => {
         console.error("Erro:", error)
